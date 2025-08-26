@@ -83,3 +83,16 @@ Before running, set up the following credentials in n8n:
 - [OpenAI](https://platform.openai.com/)
 - [Telegram Bot API](https://core.telegram.org/bots/api)
 - Docker + Postgres
+
+---
+
+## 📣 License
+
+MIT — free for personal and commercial use.
+
+---
+
+## 🙌 Author
+
+Built by [Yahor Dubrouski](https://github.com/YahorDubrouski) - connect on [LinkedIn](https://www.linkedin.
+com/in/yahor-dubrouski/)
