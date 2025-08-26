@@ -94,5 +94,4 @@ MIT — free for personal and commercial use.
 
 ## 🙌 Author
 
-Built by [Yahor Dubrouski](https://github.com/YahorDubrouski) - connect on [LinkedIn](https://www.linkedin.
-com/in/yahor-dubrouski/)
+Built by [Yahor Dubrouski](https://github.com/YahorDubrouski) - connect on [LinkedIn](https://www.linkedin.com/in/yahor-dubrouski/)
