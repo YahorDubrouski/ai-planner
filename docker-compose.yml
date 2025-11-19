@@ -8,10 +8,10 @@ services:
       - "POSTGRES_PASSWORD=${DB_POSTGRESDB_PASSWORD}"
       - "POSTGRES_DB=n8ndb"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./postgres_data:/var/lib/postgresql/data
 
   n8n:
-    image: n8nio/n8n
+    image: n8nio/n8n:latest
     ports:
       - "5678:5678"
     environment:
