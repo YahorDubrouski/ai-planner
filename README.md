@@ -86,12 +86,18 @@ Before running, set up the following credentials in n8n:
 
 ---
 
-## 📣 License
+## 👤 Author
 
-MIT — free for personal and commercial use.
+<div align="left">
+
+**Yahor Dubrouski**
+
+[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@ProDevOpsTraining)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/yahor-dubrouski/)
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/YahorDubrouski)
+
+</div>
 
 ---
 
-## 🙌 Author
-
-Built by [Yahor Dubrouski](https://github.com/YahorDubrouski) - connect on [LinkedIn](https://www.linkedin.com/in/yahor-dubrouski/)
+**Custom License** — Free for personal and non-commercial use. See [LICENSE](LICENSE).
