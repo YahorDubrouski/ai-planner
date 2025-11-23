@@ -1,6 +1,20 @@
-version: '3.7'
+version: '3.9'
 
 services:
+  traefik:
+    image: traefik:v2.11
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --api.insecure=true
+    ports:
+      - "80:80"
+      - "8080:8080"  # Traefik dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: unless-stopped
+
   postgres:
     image: postgres:15
     environment:
@@ -12,8 +26,6 @@ services:
 
   n8n:
     image: n8nio/n8n:latest
-    ports:
-      - "5678:5678"
     environment:
       - DB_TYPE=postgresdb
       - DB_POSTGRESDB_HOST=postgres
@@ -24,12 +36,20 @@ services:
       - GENERIC_TIMEZONE=Europe/Warsaw
       - N8N_BASIC_AUTH_ACTIVE=false
       - N8N_USER_MANAGEMENT_DISABLED=true
-      - N8N_HOST=localhost
+      - N8N_HOST=n8n.loc
       - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://n8n.loc/
+      - N8N_SECURE_COOKIE=false
     volumes:
       - ./n8n_data:/home/node/.n8n
     depends_on:
       - postgres
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.n8n.rule=Host(`n8n.loc`)
+      - traefik.http.routers.n8n.entrypoints=web
+      - traefik.http.services.n8n.loadbalancer.server.port=5678
 
 volumes:
   postgres_data:
