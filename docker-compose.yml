@@ -51,6 +51,21 @@ services:
       - traefik.http.routers.n8n.entrypoints=web
       - traefik.http.services.n8n.loadbalancer.server.port=5678
 
+  jarvis-frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    volumes:
+      # Bind mount for development - changes reflect immediately without rebuild
+      - ./frontend/src:/usr/share/nginx/html:ro
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.jarvis.rule=Host(`jarvis.loc`)
+      - traefik.http.routers.jarvis.entrypoints=web
+      - traefik.http.services.jarvis.loadbalancer.server.port=80
+    restart: unless-stopped
+
 volumes:
   postgres_data:
   n8n_data:

@@ -1,0 +1,67 @@
+/**
+ * Custom Styles
+ * 
+ * Additional CSS beyond Tailwind utilities.
+ */
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    opacity: 1; 
+  }
+  50% { 
+    opacity: 0.5; 
+  }
+}
+
+.jarvis-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color, opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(15, 23, 42); /* slate-900 */
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(51, 65, 85); /* slate-600 */
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(71, 85, 105); /* slate-500 */
+}
+
+/* Focus styles */
+input:focus,
+button:focus {
+  outline: none;
+  ring-width: 1px;
+  ring-color: rgb(0, 255, 136); /* jarvis-green */
+}
+
+/* Loading state */
+.htmx-indicator {
+  opacity: 0;
+  transition: opacity 200ms ease-in;
+}
+
+.htmx-request .htmx-indicator {
+  opacity: 1;
+}
+
+.htmx-request.htmx-indicator {
+  opacity: 1;
+}
+

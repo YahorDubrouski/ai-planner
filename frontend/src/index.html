@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jarvis Console</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="alternate icon" href="/assets/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/favicon.png">
+  
+  <!-- External Dependencies -->
+  <script src="https://unpkg.com/htmx.org@2.0.2"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'jarvis-green': '#00ff88',
+            'jarvis-blue': '#00d4ff',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="/styles/custom.css">
+  
+  <!-- Application Configuration -->
+  <script src="/config/app.config.js"></script>
+</head>
+<body class="h-full bg-slate-950 text-slate-100">
+  <div class="max-w-7xl mx-auto py-6 px-4 flex flex-col h-screen">
+    <!-- Header -->
+    <header class="mb-6 border-b border-slate-800 pb-4">
+      <div class="flex items-center gap-3">
+        <div class="w-3 h-3 rounded-full bg-jarvis-green jarvis-glow"></div>
+        <h1 class="text-2xl font-bold bg-gradient-to-r from-jarvis-green to-jarvis-blue bg-clip-text text-transparent">
+          JARVIS CONSOLE
+        </h1>
+        <span class="text-xs text-slate-500 ml-auto">AI Agents Command Center</span>
+      </div>
+    </header>
+
+    <div class="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-0">
+      <!-- Left: Agent List -->
+      <div class="bg-slate-900 rounded-lg border border-slate-800 p-4 overflow-y-auto">
+        <div id="agent-list-container"></div>
+      </div>
+
+      <!-- Center: Command Console -->
+      <div class="lg:col-span-2 flex flex-col bg-slate-900 rounded-lg border border-slate-800 min-h-0">
+        <!-- Log Area -->
+        <div id="log" class="flex-1 overflow-y-auto space-y-3 p-4 text-sm">
+          <!-- Messages will be inserted here -->
+        </div>
+
+        <!-- Command Input -->
+        <div class="border-t border-slate-800 p-4">
+          <form
+            id="command-form"
+            class="flex gap-2"
+            hx-post="http://n8n.loc/webhook/jarvis/command"
+            hx-target="#log"
+            hx-swap="beforeend"
+            hx-indicator="#loading"
+          >
+            <input
+              type="hidden"
+              id="agent-input"
+              name="agent"
+              value=""
+            >
+            <input
+              type="text"
+              id="command-input"
+              name="command"
+              placeholder="Ask Jarvis..."
+              class="flex-1 px-4 py-2.5 rounded-md bg-slate-800 border border-slate-600 focus:border-jarvis-green focus:outline-none focus:ring-1 focus:ring-jarvis-green text-slate-100 placeholder-slate-500"
+              autocomplete="off"
+            >
+            <button
+              type="submit"
+              class="px-6 py-2.5 rounded-md bg-gradient-to-r from-jarvis-green to-jarvis-blue text-black font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center relative min-w-[100px]"
+            >
+              <span id="loading" class="htmx-indicator absolute inset-0 flex items-center justify-center">⏳</span>
+              <span class="htmx-indicator:hidden">Send</span>
+            </button>
+          </form>
+          <div class="mt-2 flex items-center gap-2 text-xs text-slate-500">
+            <span>Selected Agent:</span>
+            <span id="selected-agent" class="text-jarvis-green font-medium">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Modules (load in order) -->
+  <script src="/utils/error-handler.js"></script>
+  <script src="/services/api.service.js"></script>
+  <script src="/components/agent-list.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
+
