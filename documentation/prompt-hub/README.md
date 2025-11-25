@@ -8,6 +8,8 @@ Tired of scrolling through all prompts to find the one you need, then copy-pasti
 
 ![Demo](demo.gif)
 
+[![Watch YouTube Short](https://img.shields.io/badge/YouTube-FF0000?style=flat-square&logo=youtube&logoColor=white)](https://www.youtube.com/shorts/6JT1PEwR-gU)
+
 ---
 
 ## ✨ Features
