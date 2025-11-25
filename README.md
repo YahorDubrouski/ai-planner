@@ -1,5 +1,7 @@
 # ⚡ n8n Automation Collection
 
+This repository now collects multiple **n8n automations**. It started with the **AI Planner** and continues to grow with additional flows like the Prompt Hub.
+
 ## 📋 Prerequisites
 
 - Ubuntu (or compatible Linux distribution)
@@ -7,8 +9,6 @@
 - Basic Linux OS knowledge
 
 ---
-
-This repository now collects multiple **n8n automations**. It started with the **AI Planner** and continues to grow with additional flows like the Prompt Hub.
 
 ## 🧩 Available Automations
 - **AI Planner (Voice assistant ↔ Notion)** — Talk to Telegram, sync tasks to Notion via n8n.
