@@ -31,6 +31,14 @@ Without Prompt Hub, you have to:
 
 ---
 
+## 📋 Prerequisites
+
+- Ubuntu (or compatible Linux distribution)
+- Docker installed and running
+- Basic Linux OS knowledge
+
+---
+
 ## 🔗 Integrations
 
 - **ChatGPT** — Direct integration for seamless prompt usage

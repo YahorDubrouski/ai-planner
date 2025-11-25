@@ -1,5 +1,13 @@
 # ⚡ n8n Automation Collection
 
+## 📋 Prerequisites
+
+- Ubuntu (or compatible Linux distribution)
+- Docker installed and running
+- Basic Linux OS knowledge
+
+---
+
 This repository now collects multiple **n8n automations**. It started with the **AI Planner** and continues to grow with additional flows like the Prompt Hub.
 
 ## 🧩 Available Automations
