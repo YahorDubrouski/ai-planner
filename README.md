@@ -1,3 +1,13 @@
+# ⚡ n8n Automation Collection
+
+This repository now collects multiple **n8n automations**. It started with the **AI Planner** and continues to grow with additional flows like the Prompt Hub.
+
+## 🧩 Available Automations
+- **AI Planner (Voice assistant ↔ Notion)** — Talk to Telegram, sync tasks to Notion via n8n.
+- **Prompt Hub (Semantic prompt search)** — GPT auto-finds the right prompt using Notion + HuggingFace embeddings. Read more in [`documentation/prompt-hub/README.md`](documentation/prompt-hub/README.md).
+
+---
+
 # 🧠 AI Planner - Voice Assistant to Notion via Telegram & n8n
 
 This project is a no-cost, AI-powered task planner that connects **Telegram**, **OpenAI**, and **Notion** via **n8n**, all hosted using **Docker**. You can talk to your Telegram bot, and it will automatically create, update, or analyze your Notion-based tasks using AI.
