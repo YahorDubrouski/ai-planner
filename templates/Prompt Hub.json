@@ -1,5 +1,5 @@
 {
-  "name": "Prompt Hub – Search",
+  "name": "Prompt Hub",
   "nodes": [
     {
       "parameters": {
@@ -10,8 +10,8 @@
       "type": "@n8n/n8n-nodes-langchain.chatTrigger",
       "typeVersion": 1.1,
       "position": [
-        -992,
-        -16
+        -880,
+        -64
       ],
       "id": "31d202b9-3206-4fd4-869a-47b408d8d553",
       "name": "When chat message received",
@@ -26,8 +26,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.1,
       "position": [
-        -784,
-        -16
+        -672,
+        -64
       ],
       "id": "09af7356-eaaa-4677-bc78-c84732b8b850",
       "name": "AI Agent"
@@ -44,8 +44,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
       "position": [
-        -832,
-        224
+        -720,
+        176
       ],
       "id": "4bb56284-f730-4775-9df1-814d01ec5cb6",
       "name": "OpenAI Chat Model",
@@ -63,8 +63,8 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
       "position": [
-        -656,
-        208
+        -544,
+        160
       ],
       "id": "5ef42413-4cb1-4d93-961d-06142a1544e2",
       "name": "Simple Memory"
@@ -235,21 +235,6 @@
     },
     {
       "parameters": {
-        "content": "# Embeddings Generator\n\n## Description\nGenerate Embeddings for the Semantic Search of the prompts.\n\n## Triggers:\n- Notion Page Created\n- Notion Page Updated\n- HTTP Webhook Triggered",
-        "height": 800,
-        "width": 1696
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        -960,
-        -1152
-      ],
-      "typeVersion": 1,
-      "id": "0d39103e-eb6a-4a33-aca6-9c7f6351bd6f",
-      "name": "Sticky Note"
-    },
-    {
-      "parameters": {
         "method": "POST",
         "url": "https://router.huggingface.co/hf-inference/models/intfloat/multilingual-e5-small/pipeline/feature-extraction",
         "authentication": "predefinedCredentialType",
@@ -274,8 +259,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        160,
-        -48
+        224,
+        -80
       ],
       "id": "9fe7af39-24e0-46e2-8e06-32d6ec765136",
       "name": "Get Question Embeddings",
@@ -305,8 +290,8 @@
       "type": "n8n-nodes-base.notion",
       "typeVersion": 2.2,
       "position": [
-        368,
-        -48
+        432,
+        -80
       ],
       "id": "e16a874f-99a8-4e5a-b3a9-3b806bfda39e",
       "name": "Get All Prompts for search",
@@ -324,8 +309,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        576,
-        -48
+        640,
+        -80
       ],
       "id": "f680bab1-c3d3-42c4-8b9b-8ef29b2d6491",
       "name": "Find a prompt"
@@ -366,8 +351,8 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.2,
       "position": [
-        -448,
-        224
+        -336,
+        176
       ],
       "id": "3b50f4e8-00f7-42d1-a0fd-f76899fbb79f",
       "name": "Search a Prompt"
@@ -449,15 +434,16 @@
     },
     {
       "parameters": {
-        "content": "# LLM - Entrypoint\n\n## Description\n\nLLM that you can talk with.\nSearch for a prompt automatically on each message send.\nIf the prompt is found - suggests it\nIf not - do the usual AI search.",
-        "height": 640,
-        "width": 768
+        "content": "## Chat Interface\n\nChatGPT interface that searches for prompts on each message. If found, suggests the prompt; otherwise responds normally.",
+        "height": 576,
+        "width": 752,
+        "color": 7
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -1072,
-        -272
+        -944,
+        -256
       ],
       "id": "ce3bee4e-de94-474c-a24e-fe667df78df3",
       "name": "Sticky Note1"
@@ -475,26 +461,58 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -64,
-        -48
+        0,
+        -80
       ],
       "id": "f9287e40-ea76-49ae-a317-d54cf25b2591",
       "name": "Search Entrypoint"
     },
     {
       "parameters": {
-        "content": "# Prompt Finder\n\n## Description\nFind a prompt comparing embeddings from notion pages (prompts) and embeddings of the user message.",
-        "height": 432,
-        "width": 1024
+        "content": "## Prompt Finder\n\nSearches Notion prompts using semantic similarity. Compares user message embeddings with saved prompt embeddings.",
+        "height": 368,
+        "width": 1008,
+        "color": 7
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -208,
-        -272
+        -128,
+        -240
       ],
       "id": "41f956b6-0687-4010-ad71-9c63d8f9a2fd",
       "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# GPT-Integrated Prompt Hub\n\n## How it works\n\nThis workflow automatically searches your saved prompts in Notion when you chat with ChatGPT. When you send any message, the AI agent first searches your Notion database using semantic similarity. It converts both your message and saved prompts into numerical vectors (embeddings) using HuggingFace, then compares them to find the most similar match. If a matching prompt is found, it suggests it to you. If not, it responds normally.\n\nThe workflow has three main parts:\n1. **Embeddings Generator** - Automatically creates embeddings when you add/update prompts in Notion, or regenerates all embeddings via webhook trigger\n2. **Chat Interface** - The ChatGPT interface that triggers prompt search on each message\n3. **Prompt Finder** - Compares your message with saved prompts to find the best match\n\n## Setup steps\n\n1. Import this workflow and configure credentials: OpenAI, HuggingFace, and Notion\n2. Create a Notion database with columns: Prompt (Text), Embeddings (Text), Checksum (Text)\n3. Set your Notion Database ID in these nodes: \"Get All Prompts\", \"On Page Update\", \"On Page Create\", \"Get All Prompts for search\"\n4. Activate the workflow, open the URL from the \"When chat message received\" node, and start chatting",
+        "height": 672,
+        "width": 736
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1744,
+        -1104
+      ],
+      "id": "83d02c0f-4100-4412-be5e-ea194554bd3b",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Embeddings Generator\n\nGenerates embeddings for new/updated prompts. Triggers: Notion page create/update or manual sync webhook to update all prompts' embeddings.",
+        "height": 752,
+        "width": 1680,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -944,
+        -1104
+      ],
+      "typeVersion": 1,
+      "id": "0d39103e-eb6a-4a33-aca6-9c7f6351bd6f",
+      "name": "Sticky Note"
     }
   ],
   "pinData": {},
@@ -669,7 +687,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "fa3a3733-5e39-47db-ad9d-61dc2aa590b4",
+  "versionId": "670bcdab-88e4-4b79-8141-cba141e9388b",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "887096e31df7e1d481172c95921dc66b208aa3a57da738f5fe10f7674fc331ba"
