@@ -1,0 +1,594 @@
+{
+  "name": "AI Diary / Advisor",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "13b7ebb0-e0f8-43fe-8aa7-634f8637d5f3",
+      "name": "Receive Telegram Messages",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "position": [
+        -2304,
+        368
+      ],
+      "webhookId": "da92e707-15aa-459b-b1fd-775897fd5249",
+      "typeVersion": 1.1,
+      "credentials": {
+        "telegramApi": {
+          "id": "OsAizJu21bsS7VYH",
+          "name": "Telegram Diary"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "af30c479-4542-405f-b315-37c50c4e2bef",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "leftValue": "={{ $json.message.voice.file_id }}",
+                    "rightValue": ""
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "Audio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "a3ca8cd4-fbb2-40b5-829a-24724f2fbc85",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "leftValue": "={{ $json.message.text || \"\" }}",
+                    "rightValue": ""
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "9bcfdee0-2f09-4037-a7b9-689ef392371d",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "leftValue": "error",
+                    "rightValue": ""
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "Error"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6c059a21-637b-41a0-9965-695bb247a5c3",
+      "name": "Voice or Text?",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        -2112,
+        352
+      ],
+      "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice.file_id }}",
+        "additionalFields": {}
+      },
+      "id": "afe42194-76ae-4457-abb5-4a68d759917d",
+      "name": "Fetch Voice Message",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        -1792,
+        336
+      ],
+      "webhookId": "3a537a34-9f80-430d-b1b5-9b1d9c909ba5",
+      "typeVersion": 1.2,
+      "credentials": {
+        "telegramApi": {
+          "id": "OsAizJu21bsS7VYH",
+          "name": "Telegram Diary"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "translate",
+        "options": {}
+      },
+      "id": "52b070a2-2575-4856-8363-b37b1027cbda",
+      "name": "Transcribe Voice to Text",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        -1584,
+        336
+      ],
+      "typeVersion": 1.8,
+      "credentials": {
+        "openAiApi": {
+          "id": "4qKzsbhlNMaGifwV",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b324a329-3c49-4f7f-b683-74331b7fe7f8",
+              "name": "=text",
+              "type": "string",
+              "value": "={{$json.message.text}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "070bf01e-e84b-4bcc-821a-c6dfd47fa2fc",
+      "name": "Prepare for LLM",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -1792,
+        512
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "content": "## Message Storage\n\nReceives Telegram messages (voice or text), transcribes voice to text, and stores entries in Notion diary. Sends confirmation with diary link.",
+        "height": 516,
+        "width": 1676,
+        "color": 7
+      },
+      "id": "a9b2fada-8cc2-4d35-adc9-20a0c483c237",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2352,
+        192
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a91f8b36-f7b5-4cd3-81cf-f42d5a98152c",
+              "name": "text",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1312,
+        416
+      ],
+      "id": "40301614-325f-4549-8de4-22294c4c63c4",
+      "name": "Prepare Unified Text"
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "293041f0-262c-8023-892c-e2b040587352",
+          "mode": "list",
+          "cachedResultName": "Diary",
+          "cachedResultUrl": "https://www.notion.so/293041f0262c8023892ce2b040587352"
+        },
+        "title": "=",
+        "simple": false,
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Text|title",
+              "title": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        -1056,
+        416
+      ],
+      "id": "a8d65a16-9e2a-4d8a-9ca3-21cd954a5241",
+      "name": "Create a diary note",
+      "credentials": {
+        "notionApi": {
+          "id": "7IKiUuiR7SzaK9ys",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Receive Telegram Messages').item.json.message.chat.id }}",
+        "text": "=Task Link :{{ $json.url }}",
+        "additionalFields": {}
+      },
+      "id": "5e6c65e0-38c2-41a2-880e-ff8cede866d8",
+      "name": "Send Confirmation",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        -864,
+        416
+      ],
+      "webhookId": "9e0b12dd-ed75-46fc-861e-bf4f59fe6f2d",
+      "typeVersion": 1.2,
+      "credentials": {
+        "telegramApi": {
+          "id": "OsAizJu21bsS7VYH",
+          "name": "Telegram Diary"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "getAll",
+        "databaseId": {
+          "__rl": true,
+          "value": "293041f0-262c-8023-892c-e2b040587352",
+          "mode": "list",
+          "cachedResultName": "Diary",
+          "cachedResultUrl": "https://www.notion.so/293041f0262c8023892ce2b040587352"
+        },
+        "returnAll": true,
+        "filterType": "manual",
+        "filters": {
+          "conditions": [
+            {
+              "key": "Created time|created_time",
+              "condition": "on_or_after",
+              "createdTimeValue": "={{ new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString() }}"
+            }
+          ]
+        },
+        "options": {
+          "sort": {
+            "sortValue": [
+              {
+                "key": "Created time|created_time",
+                "direction": "ascending"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        -1888,
+        -96
+      ],
+      "id": "470c4b76-372a-4756-941c-6caa47638fac",
+      "name": "Get Dairy Info",
+      "credentials": {
+        "notionApi": {
+          "id": "7IKiUuiR7SzaK9ys",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 6
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -2096,
+        -96
+      ],
+      "id": "da714c62-0b27-45d0-be51-2256d9e6f613",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Combine all Notion entries into one text block\nconst entries = $input.all();\n\nconst diaryText = entries.map(item => {\n  const created = item.json.property_created_time;\n  const text    = item.json.property_text;\n  return `${created}\\n${text}`;\n}).join('\\n\\n---\\n\\n');\n\nreturn [\n  {\n    json: {\n      diary_text: diaryText,\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1680,
+        -96
+      ],
+      "id": "8a0d6dc3-1f4d-4f2b-9428-93470f71d6e7",
+      "name": "Prepare Dairy Info"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are an empathetic AI therapist and life coach.  \nYour job is to read the user's last 7 days of diary entries and give:\n- a short emotional summary,\n- key observations about their priorities,\n- and 0–3 concrete actions for tomorrow.\n\nThe user's priorities in order:\n1) Health — physical and mental wellness.\n2) Career — professional growth and work-life balance.\n3) Relationships — family, friends, and meaningful connections.\n4) Personal Growth — learning, hobbies, and self-improvement.\n\nGuidelines:\n- Follow the priority order strictly.\n- Give practical, small steps.\n- Avoid clichés.\n- Answer in under 150 words.\n- Format the text for easier reading in telegram (the text will be sent to telegram).",
+              "role": "system"
+            },
+            {
+              "content": "=Here are my diary entries for the last 7 days:\n\n{{ $json.diary_text }}\n\nPlease:\n1) Summarise my emotional state.\n2) Give key observations per priority (Health, Career, Relationships, Personal Growth).\n3) Suggest 0–3 small actions I can do tomorrow."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -1472,
+        -96
+      ],
+      "id": "c76332e8-a76f-4b1a-abe0-6b93e038e987",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "4qKzsbhlNMaGifwV",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.message.content }}",
+        "additionalFields": {}
+      },
+      "id": "b9d7db73-d068-426d-8632-f1b7dd13e8ce",
+      "name": "Send Daily Report",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        -1136,
+        -96
+      ],
+      "webhookId": "cd39beaa-33e2-4960-bd01-211f8cc71bc6",
+      "typeVersion": 1.2,
+      "credentials": {
+        "telegramApi": {
+          "id": "OsAizJu21bsS7VYH",
+          "name": "Telegram Diary"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# AI Diary / Advisor\n\n## How it works\n\nThis workflow helps you maintain a personal diary and receive daily AI-powered advice. It has two main functions:\n\n1. **Message Storage** - When you send a message (voice or text) via Telegram, it automatically transcribes voice messages, stores everything in your Notion diary, and sends you a confirmation with the diary entry link.\n\n2. **Daily Advice** - Every day at 6 AM, the workflow analyzes your last 7 days of diary entries using AI. It provides an emotional summary, observations about your priorities and goals, and suggests 0-3 concrete actions for tomorrow. You can customize the AI's focus areas and priorities in the \"Message a model\" node system prompt.\n\nThe AI acts as an empathetic therapist and life coach, giving personalized guidance based on your diary entries.\n\n## Setup steps\n\n1. Import this workflow and configure credentials: Telegram Bot, OpenAI, and Notion\n2. Create a Notion database with columns: `Text` (title property) for diary entries and `Created time` (automatically included, used to filter last 7 days of entries)\n3. Set your Notion Database ID in these nodes: \"Get Dairy Info\" and \"Create a diary note\"\n4. Configure your Telegram Chat ID in the \"Send Daily Report\" node (replace the hardcoded chat ID)\n5. Customize the AI advisor's priorities and focus areas in the \"Message a model\" node system prompt to match your goals\n6. Activate the workflow and start sending messages to your Telegram bot\n\nSee section stickies below for node-specific details.",
+        "height": 992,
+        "width": 640
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -3040,
+        -304
+      ],
+      "id": "fbc7b7f2-b2d1-40e9-b8fc-58e1c38aa552",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Daily Report Generation\n\nRuns daily at 6 AM. Analyzes last 7 days of diary entries and sends personalized AI advice via Telegram.",
+        "height": 400,
+        "width": 1680,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2352,
+        -240
+      ],
+      "id": "add77a0e-72b5-4c89-8b86-a35a909f39a6",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Voice or Text?": {
+      "main": [
+        [
+          {
+            "node": "Fetch Voice Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare for LLM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare for LLM": {
+      "main": [
+        [
+          {
+            "node": "Prepare Unified Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Voice Message": {
+      "main": [
+        [
+          {
+            "node": "Transcribe Voice to Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe Voice to Text": {
+      "main": [
+        [
+          {
+            "node": "Prepare Unified Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Receive Telegram Messages": {
+      "main": [
+        [
+          {
+            "node": "Voice or Text?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Unified Text": {
+      "main": [
+        [
+          {
+            "node": "Create a diary note",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a diary note": {
+      "main": [
+        [
+          {
+            "node": "Send Confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Dairy Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Dairy Info": {
+      "main": [
+        [
+          {
+            "node": "Prepare Dairy Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Dairy Info": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Send Daily Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "76a65fce-a9ee-4323-a2ce-4166ab19d273",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "da93c2168612dc5487f9ff80e5b747646c2bbd91d6f7e1ea19d909e6b33c4700"
+  },
+  "id": "qXz0s6HogvqdhHxC",
+  "tags": []
+}
